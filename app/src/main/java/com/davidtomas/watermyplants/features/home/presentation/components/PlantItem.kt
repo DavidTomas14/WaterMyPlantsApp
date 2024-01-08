@@ -57,7 +57,7 @@ fun PlantItem(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            ImageSectionWithTags(water = plant.water, date = plant.date)
+            ImageSectionWithTags(water = plant.water, date = plant.time)
             ItemFooter(
                 name = plant.name,
                 description = plant.description,

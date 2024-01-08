@@ -1,9 +1,9 @@
-package com.davidtomas.watermyplants.features.home.presentation
+package com.davidtomas.watermyplants.features.plant_detail.presentation
 
 import com.davidtomas.watermyplants.features.home.domain.model.Plant
 import com.davidtomas.watermyplants.features.home.domain.model.PlantStatus
 
-data class HomeState(
+data class PlantDetailState(
     val tabSelected: PlantStatus = PlantStatus.Upcoming,
     val showDialog: Boolean = false,
     val plantToDelete: Plant? = null,

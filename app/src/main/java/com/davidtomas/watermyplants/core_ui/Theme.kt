@@ -7,6 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
+
 private val DarkColorPalette = darkColors(
     background = neutralus900,
     onBackground = accent600,
@@ -17,6 +18,7 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
+    onPrimary = accent500,
     background = neutralus0,
     onBackground = otherOlive100,
     secondary = accent600,

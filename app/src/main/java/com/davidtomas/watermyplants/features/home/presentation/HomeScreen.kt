@@ -36,6 +36,7 @@ import com.davidtomas.watermyplants.features.home.presentation.components.TabsCo
 @Composable
 fun HomeScreen(
     scaffoldState: ScaffoldState,
+    onPlantItemClick: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
@@ -87,6 +88,7 @@ fun HomeScreen(
                     PlantItem(
                         plant = plant,
                         onCardClick = {
+                            onPlantItemClick(it.name)
                         },
                         onCardLongClick = {
                             viewModel.onEvent(HomeEvent.OnDeletePlantLongPress(it))

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Water My Plants</string>
-    <string name="status_upcoming">Upcoming</string>
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="lets_care_my_plants">Let\'s Care \nMy Plants!</string>
+    <string name="notifications">Notifications</string>
     <string name="status_forgot_to_water">Forgot to water</string>
     <string name="status_history">History</string>
-    <string name="notifications">Notifications</string>
-    <string name="lets_care_my_plants">Let\'s Care \nMy Plants!</string>
+    <string name="status_upcoming">Upcoming</string>
 </resources>

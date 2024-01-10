@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.davidtomas.watermyplants"
-    compileSdk = ProjectConfig.compileSdk
+    compileSdk = 34
 
     defaultConfig {
         applicationId = ProjectConfig.appId
@@ -54,6 +54,7 @@ dependencies {
     implementation(Compose.compiler)
     implementation(Compose.ui)
     implementation(Compose.uiToolingPreview)
+    debugImplementation(Compose.uiToolingPreviewDebug)
     implementation(Compose.hiltNavigationCompose)
     implementation(Compose.material)
     implementation(Compose.runtime)

@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
+import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
 
 @Composable
 fun InfoInBannerComponent(
@@ -78,5 +80,13 @@ fun InfoItem(
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Preview
+@Composable
+fun InfoInBannerPreview(){
+    WaterMyPlantsTheme {
+        InfoInBannerComponent()
     }
 }

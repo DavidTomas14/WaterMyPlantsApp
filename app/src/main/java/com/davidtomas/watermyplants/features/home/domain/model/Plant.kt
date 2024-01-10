@@ -5,7 +5,7 @@ data class Plant(
     val description: String,
     val water: String,
     var needsWater: Boolean,
-    val date: String,
+    val time: String,
     val imageUrl: String,
     val plantStatus: PlantStatus
 )

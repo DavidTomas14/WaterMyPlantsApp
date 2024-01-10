@@ -1,10 +1,19 @@
 <resources>
     <string name="app_name">Water My Plants</string>
     <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_text">Got it</string>
     <string name="edit">Edit</string>
+    <string name="label_plant_size_small">Small</string>
+    <string name="label_plant_size_medium">Medium</string>
+    <string name="label_plant_size_large">Large</string>
+    <string name="label_plant_size_xlarge">Extra Large</string>
     <string name="lets_care_my_plants">Let\'s Care \nMy Plants!</string>
     <string name="notifications">Notifications</string>
+    <string name="plant_name">Plant Name *</string>
     <string name="status_forgot_to_water">Forgot to water</string>
     <string name="status_history">History</string>
     <string name="status_upcoming">Upcoming</string>
+    <string name="sure_of_delete">Do you really want to delete the \"Name of plant” This process cannot be undone.</string>
+    <string name="enter_plant_name">Enter Plant Name</string>
 </resources>

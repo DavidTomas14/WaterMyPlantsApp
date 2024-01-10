@@ -1,55 +1,78 @@
-package com.davidtomas.watermyplants.features.home.presentation
+package com.davidtomas.watermyplants.features.add_edit.presentation.screens.add
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.davidtomas.watermyplants.R
-import com.davidtomas.watermyplants.core.util.UiEvent
+import com.davidtomas.watermyplants.core.domain.model.PlantSize
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
-import com.davidtomas.watermyplants.features.home.presentation.components.DeleteDialogComponent
-import com.davidtomas.watermyplants.features.home.presentation.components.HeaderComponent
-import com.davidtomas.watermyplants.features.home.presentation.components.PlantBox
-import com.davidtomas.watermyplants.features.home.presentation.components.PlantItem
-import com.davidtomas.watermyplants.features.home.presentation.components.TabsComponent
+import com.davidtomas.watermyplants.features.add_edit.presentation.components.DatesSelectionDialog
+import com.davidtomas.watermyplants.features.add_edit.presentation.components.InputBasic
+import com.davidtomas.watermyplants.features.add_edit.presentation.components.SizeSelectionDialog
+import java.time.DayOfWeek
 
 @Composable
-fun HomeScreen(
+fun AddScreen(
     scaffoldState: ScaffoldState,
-    onPlantItemClick: (String) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: AddPlantViewModel = hiltViewModel()
 ) {
+
     val spacing = LocalSpacing.current
     val context = LocalContext.current
+    var showSelectSizeDialog by remember { mutableStateOf(false) }
+    var showSelectDatesDialog by remember { mutableStateOf(false) }
+
     val state = viewModel.state
-    val plants = viewModel.state.plants
-    var showDialog by remember { mutableStateOf(false) }
+
+    Column {
+        InputBasic(
+            labelText = stringResource(id = R.string.plant_name),
+            hintText = stringResource(id = R.string.enter_plant_name),
+            text = state.planName,
+            onTextChanged = { name ->
+                viewModel.onEvent(AddPlantEvent.OnPlantNameChanged(name))
+            }
+        )
+    }
+        SizeSelectionDialog(
+            dialogTitle = "Plant Size",
+            onConfirmText = "Got it",
+            onCancelText = "Cancel",
+            isVisible = showSelectSizeDialog,
+            sizeSelected = PlantSize.XLarge,
+            onSizeSelected = { size ->
+                viewModel.onEvent(AddPlantEvent.OnSelectSize(size))
+            }
+        )
+
+    DatesSelectionDialog(
+        dialogTitle = "Dates",
+        datesSelected = listOf(DayOfWeek.MONDAY),
+        onConfirmText = "Got it",
+        onCancelText = "Cancel",
+        onAction = {
+                   viewModel.onEvent(AddPlantEvent.OnSelectDateClick())
+        },
+        isVisible = showSelectDatesDialog
+    )
+
+    /* val state = viewModel.state
+     val plants = viewModel.state.plants
+     var showDialog by remember { mutableStateOf(false) }
 
 
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                /*is UiEvent.Success -> onNextButtonClick()*/
+
+     LaunchedEffect(key1 = true) {
+         viewModel.uiEvent.collect { event ->
+             when (event) {
+                 *//*is UiEvent.Success -> onNextButtonClick()*//*
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context)
@@ -119,5 +142,5 @@ fun HomeScreen(
             onCancelText = stringResource(id = R.string.cancel),
             onConfirmText = stringResource(id = R.string.confirm_text)
         )
-    }
+    }*/
 }

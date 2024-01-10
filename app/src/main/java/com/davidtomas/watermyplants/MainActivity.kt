@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.davidtomas.watermyplants.core.navigation.Route
 import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
+import com.davidtomas.watermyplants.features.add_edit.presentation.screens.add.AddScreen
 import com.davidtomas.watermyplants.features.home.presentation.HomeScreen
 import com.davidtomas.watermyplants.features.plant_detail.presentation.PlantDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,17 +45,17 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     floatingActionButton = {
                         if (showFab)
-                        FloatingActionButton(
-                            onClick = {
-                                navController.navigate(Route.ADD)
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate(Route.ADD)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "",
+                                    tint = Color.White
+                                )
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "",
-                                tint = Color.White
-                            )
-                        }
                     },
                     floatingActionButtonPosition = FabPosition.End
                 ) {
@@ -102,6 +103,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.ADD) {
                             showFab = false
+                            AddScreen(
+                                scaffoldState = scaffoldState,
+                                onPlantItemClick ={} )
                         }
                     }
                 }

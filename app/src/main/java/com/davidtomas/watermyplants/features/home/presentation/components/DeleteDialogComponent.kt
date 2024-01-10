@@ -1,5 +1,6 @@
 package com.davidtomas.watermyplants.features.home.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -31,8 +31,12 @@ fun DeleteDialogComponent(
     modifier: Modifier = Modifier,
     isVisible: Boolean = false,
     dialogProperties: DialogProperties = DialogProperties(),
+    dialogTitle: String,
+    onConfirmText: String,
+    onCancelText: String,
     onAction: (String) -> Unit,
     onCancel: () -> Unit,
+    content: @Composable (() -> Unit)? = null
 ) {
     val spacing = LocalSpacing.current
     if (isVisible) {
@@ -56,7 +60,7 @@ fun DeleteDialogComponent(
 
                     ) {
                         IconButton(onClick = {}) {
-                            Icon(
+                            Image(
                                 painter = painterResource(id = R.drawable.delete_icon),
                                 contentDescription = stringResource(id = R.string.notifications)
                             )
@@ -67,21 +71,24 @@ fun DeleteDialogComponent(
                     }
                     Text(
                         modifier = Modifier.padding(spacing.spaceMedium),
-                        text = "Do you really want to delete the \"Name of plant” This process cannot be undone."
+                        text = dialogTitle
                     )
+                    if (content != null) {
+                        content()
+                    }
                     Row {
                         Button(
                             modifier= Modifier.background(Color.White),
                             onClick = { onCancel() }
                         ) {
-                            Text(text = "Cancel")
+                            Text(text = onCancelText)
                         }
                         Spacer(modifier = Modifier.width(spacing.spaceMedium))
                         Button(
                             modifier= Modifier.background(MaterialTheme.colors.background),
                             onClick = { onAction("") }
                         ) {
-                            Text(text = "Got it")
+                            Text(text = onConfirmText)
                         }
                     }
                 }

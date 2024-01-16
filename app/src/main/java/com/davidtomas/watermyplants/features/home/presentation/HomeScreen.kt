@@ -42,7 +42,8 @@ fun HomeScreen(
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     val state = viewModel.state
-    val plants = viewModel.state.plants
+    val tabSelected = viewModel.state.tabSelected
+    val plants = viewModel.state.plantModels[tabSelected]
     var showDialog by remember { mutableStateOf(false) }
 
 
@@ -76,29 +77,32 @@ fun HomeScreen(
                 viewModel.onEvent(HomeEvent.OnTabClick(plantStatus))
             }
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(20.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                items(
-                    plants.filter { it.plantStatus == viewModel.state.tabSelected },
-                    key = { it.name }) { plant ->
-                    PlantItem(
-                        plant = plant,
-                        onCardClick = {
-                            onPlantItemClick(it.name)
-                        },
-                        onCardLongClick = {
-                            viewModel.onEvent(HomeEvent.OnDeletePlantLongPress(it))
-                            showDialog = true
-                        },
-                        onIconClick = {
-                            viewModel.onEvent(HomeEvent.OnIconClick(it))
-                        }
-                    )
+                if (plants != null) {
+                    items(
+                        plants,
+                        key = { it.name }) { plant ->
+                        PlantItem(
+                            plantModel = plant,
+                            onCardClick = {
+                                onPlantItemClick(it.id.toString())
+                            },
+                            onCardLongClick = {
+                                viewModel.onEvent(HomeEvent.OnDeletePlantLongPress(it))
+                                showDialog = true
+                            },
+                            onIconClick = {
+                                viewModel.onEvent(HomeEvent.OnIconClick(it))
+                            }
+                        )
 
+                    }
                 }
             }
         }
@@ -116,8 +120,8 @@ fun HomeScreen(
                 dismissOnClickOutside = true
             ),
             dialogTitle = stringResource(id = R.string.sure_of_delete),
-            onCancelText = stringResource(id = R.string.cancel),
-            onConfirmText = stringResource(id = R.string.confirm_text)
+            onCancelText = stringResource(id = R.string.button_cancel),
+            onConfirmText = stringResource(id = R.string.button_confirm)
         )
     }
 }

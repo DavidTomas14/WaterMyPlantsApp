@@ -25,7 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.davidtomas.watermyplants.core.navigation.Route
 import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
-import com.davidtomas.watermyplants.features.add_edit.presentation.screens.add.AddScreen
+import com.davidtomas.watermyplants.features.add_edit.presentation.screens.AddEditPlantScreen
 import com.davidtomas.watermyplants.features.home.presentation.HomeScreen
 import com.davidtomas.watermyplants.features.plant_detail.presentation.PlantDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         if (showFab)
                             FloatingActionButton(
                                 onClick = {
-                                    navController.navigate(Route.ADD)
+                                    navController.navigate(Route.ADD_EDIT)
                                 }
                             ) {
                                 Icon(
@@ -66,23 +66,23 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HOME) {
                             showFab = true
                             HomeScreen(
-                                onPlantItemClick = { plantName ->
+                                onPlantItemClick = { plantId ->
                                     navController.navigate(
-                                        Route.PLANT_DETAIL + "/$plantName"
+                                        Route.PLANT_DETAIL + "/$plantId"
                                     )
                                 },
                                 scaffoldState = scaffoldState
                             )
                         }
                         composable(
-                            route = Route.PLANT_DETAIL + "/{plantName}",
+                            route = Route.PLANT_DETAIL + "/{plantId}",
                             arguments = listOf(
-                                navArgument("plantName") {
+                                navArgument("plantId") {
                                     type = NavType.StringType
                                 }
                             )
                         ) {
-                            val plantName = it.arguments?.getString("plantName")!!
+                            val plantId = it.arguments?.getString("plantId")!!
                             showFab = false
                             PlantDetailScreen(
                                 onBackIconClick = {
@@ -90,22 +90,28 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onEditIconClick = {
                                     navController.navigate(
-                                        Route.EDIT
+                                        Route.ADD_EDIT  + "?plantId=$plantId"
                                     )
                                 },
-                                plantName = plantName,
+                                plantName = plantId,
                                 scaffoldState = scaffoldState
                             )
                         }
-                        composable(Route.EDIT) {
+                        composable(
+                            route = Route.ADD_EDIT + "?plantId={plantId}",
+                            arguments = listOf(
+                                navArgument("plantId") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                }
+                            )) {
+                            val plantId = it.arguments?.getString("plantId")
                             showFab = false
-
-                        }
-                        composable(Route.ADD) {
-                            showFab = false
-                            AddScreen(
+                            AddEditPlantScreen(
+                                plantId = plantId,
                                 scaffoldState = scaffoldState,
-                                onPlantItemClick ={} )
+                                navigateHome = { navController.navigate(Route.HOME) }
+                            )
                         }
                     }
                 }

@@ -8,9 +8,9 @@ data class PlantEntity(
     val name: String,
     val description: String,
     val water: String,
-    var needsWater: Boolean,
-    val date: String,
+    val wateringDates: String,
+    val alreadyWateredDated: String,
+    val time: String,
     val imageUrl: String,
-    val plantStatus: String,
     @PrimaryKey val id: Int? = null
 )

@@ -1,11 +1,14 @@
 package com.davidtomas.watermyplants.features.home.domain.model
 
-data class Plant(
+import java.time.DayOfWeek
+
+data class PlantModel(
     val name: String,
     val description: String,
     val water: String,
-    var needsWater: Boolean,
     val time: String,
+    val wateringDates: List<DayOfWeek>,
+    val alreadyWateredDates: List<DayOfWeek>,
     val imageUrl: String,
-    val plantStatus: PlantStatus
+    val id: Int? = null
 )

@@ -2,10 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+
+
     <application
         android:name=".WaterMyPlantsApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:supportsRtl="true"
+        android:label="@string/app_name"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

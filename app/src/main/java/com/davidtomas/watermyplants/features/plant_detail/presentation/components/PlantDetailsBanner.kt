@@ -15,7 +15,7 @@ import com.davidtomas.watermyplants.core_ui.LocalSpacing
 import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
 
 @Composable
-fun BannerComponent(
+fun PlantDetailsBanner(
     modifier: Modifier = Modifier,
     url: String? = null
 ) {
@@ -52,6 +52,6 @@ fun BannerComponent(
 @Composable
 fun BannerComponentPreview(){
     WaterMyPlantsTheme {
-        BannerComponent()
+        PlantDetailsBanner()
     }
 }

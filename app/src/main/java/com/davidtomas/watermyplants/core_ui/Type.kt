@@ -20,6 +20,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
+    body2 = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
     button = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.W500,

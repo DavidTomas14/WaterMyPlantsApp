@@ -1,4 +1,4 @@
-package com.davidtomas.watermyplants.features.add_edit.presentation.components
+package com.davidtomas.watermyplants.features.add_edit.presentation.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.davidtomas.watermyplants.core.util.capitalizeOnlyFirstLetter
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
 import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
 import java.time.DayOfWeek
+import java.time.DayOfWeek.SUNDAY
+import java.time.DayOfWeek.THURSDAY
 
 
 @Composable
@@ -41,13 +44,16 @@ fun DatesSelectionDialog(
     onCancelText: String,
     initialDatesSelected: List<DayOfWeek>,
     onAction: (List<DayOfWeek>) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties,
+    dialogProperties: DialogProperties = DialogProperties(
+        dismissOnBackPress = true,
+        dismissOnClickOutside = true
+    ),
     isVisible: Boolean = false,
 ) {
 
     val spacing = LocalSpacing.current
-    var isVisible by remember { mutableStateOf(isVisible) }
     var datesSelected by remember { mutableStateOf(initialDatesSelected) }
     var isEveryDaySelected by remember {
         mutableStateOf(
@@ -66,7 +72,7 @@ fun DatesSelectionDialog(
     }
     if (isVisible) {
         Dialog(
-            onDismissRequest = { isVisible = false },
+            onDismissRequest = onDismiss,
             properties = dialogProperties,
         ) {
 
@@ -88,68 +94,55 @@ fun DatesSelectionDialog(
                     )
                     Spacer(modifier = Modifier.height(spacing.spaceMedium))
 
-                    CustomDialog(
-                        dialogTitle = dialogTitle,
-                        onConfirmText = onConfirmText,
-                        onCancelText = onCancelText,
-                        onAction = onAction,
-                        isVisible = isVisible,
-                        dialogProperties = dialogProperties
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Checkbox(
-                                    checked = isEveryDaySelected,
-                                    onCheckedChange = { isSelected ->
-                                        isEveryDaySelected = isSelected
-                                        datesSelected = emptyList()
-                                    },
-                                    colors = CheckboxDefaults.colors(
-                                        checkedColor = MaterialTheme.colors.onPrimary,
-                                        uncheckedColor = Color.Gray
-                                    )
+                        Checkbox(
+                            checked = isEveryDaySelected,
+                            onCheckedChange = { isSelected ->
+                                isEveryDaySelected = isSelected
+                                datesSelected = emptyList()
+                            },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = MaterialTheme.colors.onPrimary,
+                                uncheckedColor = Color.Gray
+                            )
+                        )
+                        Text(
+                            text = "Everyday",
+                            color = if (isEveryDaySelected) Color.Black else Color.Gray,
+                            fontWeight = if (isEveryDaySelected) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
+                    DayOfWeek.values().forEach { dayOfWeek ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val isDaySelected =
+                                datesSelected.contains(dayOfWeek) && !isEveryDaySelected
+                            Checkbox(
+                                checked = isDaySelected,
+                                onCheckedChange = { isSelected ->
+                                    if (isSelected) {
+                                        isEveryDaySelected = false
+                                        datesSelected = datesSelected.plus(dayOfWeek)
+                                    } else
+                                        datesSelected = datesSelected.minus(dayOfWeek)
+                                },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = MaterialTheme.colors.onPrimary,
+                                    uncheckedColor = Color.Gray
                                 )
-                                Text(
-                                    text = "Everyday",
-                                    color = if (isEveryDaySelected) Color.Black else Color.Gray,
-                                    fontWeight = if (isEveryDaySelected) FontWeight.Bold else FontWeight.Normal
-                                )
-                            }
-                            DayOfWeek.values().forEach { dayOfWeek ->
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    val isDaySelected =
-                                        datesSelected.contains(dayOfWeek) && !isEveryDaySelected
-                                    Checkbox(
-                                        checked = isDaySelected,
-                                        onCheckedChange = { isSelected ->
-                                            if (isSelected) {
-                                                isEveryDaySelected = false
-                                                datesSelected = datesSelected.plus(dayOfWeek)
-                                            } else
-                                                datesSelected = datesSelected.minus(dayOfWeek)
-                                        },
-                                        colors = CheckboxDefaults.colors(
-                                            checkedColor = MaterialTheme.colors.onPrimary,
-                                            uncheckedColor = Color.Gray
-                                        )
-                                    )
-                                    Text(
-                                        text = dayOfWeek.name.lowercase()
-                                            .replaceFirstChar { it.uppercase() },
-                                        color = if (isDaySelected) Color.Black else Color.Gray,
-                                        fontWeight = if (isDaySelected) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                }
-                            }
+                            )
+                            Text(
+                                text = dayOfWeek.name.capitalizeOnlyFirstLetter(),
+                                color = if (isDaySelected) Color.Black else Color.Gray,
+                                fontWeight = if (isDaySelected) FontWeight.Bold else FontWeight.Normal
+                            )
                         }
                     }
-
                     Spacer(modifier = Modifier.height(spacing.spaceTiny))
                     Row {
                         Button(
@@ -159,7 +152,7 @@ fun DatesSelectionDialog(
                                 backgroundColor = Color.White,
                                 contentColor = Color.Black
                             ),
-                            onClick = { isVisible = false }
+                            onClick = onDismiss
                         ) {
                             Text(text = onCancelText)
                         }
@@ -187,14 +180,15 @@ fun DatesSelectionDialog(
 
 @Preview
 @Composable
-fun DatesSelectionDialog() {
+fun DatesSelectionDialogPreview() {
     WaterMyPlantsTheme {
         DatesSelectionDialog(
             dialogTitle = "Dates",
-            datesSelected = listOf(DayOfWeek.MONDAY),
             onConfirmText = "Got it",
             onCancelText = "Cancel",
+            initialDatesSelected = listOf(THURSDAY, SUNDAY),
             onAction = { /*TODO*/ },
+            onDismiss = {},
             isVisible = true
         )
     }

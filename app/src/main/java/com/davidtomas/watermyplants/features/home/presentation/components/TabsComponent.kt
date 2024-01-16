@@ -35,9 +35,9 @@ fun TabsComponent(
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         val plantsStatusOrder = listOf(
-            PlantStatus.Upcoming,
+            PlantStatus.Today,
             PlantStatus.ForgotToWater,
-            PlantStatus.History
+            PlantStatus.NextDays
         )
         plantsStatusOrder.forEach { plantStatus ->
             TabItem(

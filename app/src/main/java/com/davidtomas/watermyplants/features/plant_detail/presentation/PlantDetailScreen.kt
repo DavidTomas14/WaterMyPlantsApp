@@ -16,10 +16,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.davidtomas.watermyplants.core.util.UiEvent
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
 import com.davidtomas.watermyplants.features.home.presentation.components.PlantBox
-import com.davidtomas.watermyplants.features.plant_detail.presentation.components.BannerComponent
 import com.davidtomas.watermyplants.features.plant_detail.presentation.components.DetailSheetComponent
 import com.davidtomas.watermyplants.features.plant_detail.presentation.components.FooterButtonComponent
 import com.davidtomas.watermyplants.features.plant_detail.presentation.components.HeaderIconsComponent
+import com.davidtomas.watermyplants.features.plant_detail.presentation.components.PlantDetailsBanner
 
 @Composable
 fun PlantDetailScreen(
@@ -32,7 +32,7 @@ fun PlantDetailScreen(
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     val state = viewModel.state
-    val plants = viewModel.state.plants
+    val plants = viewModel.state.plantModels
     var showDialog by remember { mutableStateOf(false) }
 
 
@@ -54,7 +54,7 @@ fun PlantDetailScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            BannerComponent()
+            PlantDetailsBanner()
             DetailSheetComponent(
                 modifier = Modifier.weight(1f),
                 name = "Plant Name",
@@ -67,9 +67,10 @@ fun PlantDetailScreen(
             modifier = Modifier.align(Alignment.TopCenter)
         )
         FooterButtonComponent(
+            text = "Mark as Watered",
             modifier = Modifier
                 .align(Alignment.BottomCenter),
-            text = "Mark as Watered"
+            onClick = {}
         )
     }
 }

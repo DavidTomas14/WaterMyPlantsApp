@@ -1,9 +1,10 @@
-package com.davidtomas.watermyplants.features.add_edit.presentation.components
+package com.davidtomas.watermyplants.features.add_edit.presentation.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -12,6 +13,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,32 +24,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.davidtomas.watermyplants.core.domain.model.PlantSize
+import com.davidtomas.watermyplants.core.domain.model.PlantSize.Small
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
 import com.davidtomas.watermyplants.core_ui.WaterMyPlantsTheme
-import java.time.DayOfWeek
-
 
 @Composable
-fun CustomDialog(
+fun SizeSelectionDialog(
+    initialSizeSelected: PlantSize,
+    onAction: (PlantSize) -> Unit,
+    onDismiss: () -> Unit,
+    isVisible: Boolean,
     dialogTitle: String,
     onConfirmText: String,
     onCancelText: String,
-    onAction: (List<DayOfWeek>) -> Unit,
+    dialogProperties: DialogProperties = DialogProperties(
+        dismissOnBackPress = true,
+        dismissOnClickOutside = true,
+    ),
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties,
-    isVisible: Boolean = false,
-    content: @Composable (() -> Unit)? = null
 ) {
     val spacing = LocalSpacing.current
-    var isVisible by remember { mutableStateOf(isVisible) }
+    var sizeSelected by remember { mutableStateOf(initialSizeSelected) }
     if (isVisible) {
         Dialog(
-            onDismissRequest = { isVisible = false },
+            onDismissRequest = onDismiss,
             properties = dialogProperties,
         ) {
 
@@ -67,8 +75,28 @@ fun CustomDialog(
                         color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                    if (content != null) {
-                        content()
+                    Column {
+                        PlantSize.values().forEach {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = it == sizeSelected,
+                                    onClick = {
+                                        sizeSelected = it
+                                    },
+                                    colors = RadioButtonDefaults.colors(
+                                        selectedColor = MaterialTheme.colors.onPrimary,
+                                        unselectedColor = Color.Gray
+                                    )
+                                )
+                                Text(
+                                    text = stringResource(id = it.textResId),
+                                    color = if (it == sizeSelected) Color.Black else Color.Gray,
+                                )
+                            }
+                        }
                     }
                     Spacer(modifier = Modifier.height(spacing.spaceTiny))
                     Row {
@@ -79,7 +107,7 @@ fun CustomDialog(
                                 backgroundColor = Color.White,
                                 contentColor = Color.Black
                             ),
-                            onClick = { isVisible = false }
+                            onClick = onDismiss
                         ) {
                             Text(text = onCancelText)
                         }
@@ -91,7 +119,7 @@ fun CustomDialog(
                                 backgroundColor = MaterialTheme.colors.onPrimary,
                                 contentColor = Color.White
                             ),
-                            onClick = onAction(date)
+                            onClick = { onAction(sizeSelected) }
                         ) {
                             Text(text = onConfirmText)
                         }
@@ -103,18 +131,23 @@ fun CustomDialog(
 }
 
 @Composable
-@Preview
-fun CustomDialog() {
+@Preview(showBackground = true)
+fun SizeSelectionDialogPreview() {
     WaterMyPlantsTheme {
-        CustomDialog(
+        var isVisible by remember {
+            mutableStateOf(false)
+        }
+        SizeSelectionDialog(
+            initialSizeSelected = Small,
+            onAction = {
+                       isVisible = false
+            },
+            onDismiss = { isVisible = false },
             dialogTitle = "Plant Size",
             onConfirmText = "Got it",
             onCancelText = "Cancel",
-            dialogProperties = DialogProperties(true, true),
-            onAction = {},
-            isVisible = true
-        ) {
-
-        }
+            isVisible = isVisible,
+        )
     }
 }
+

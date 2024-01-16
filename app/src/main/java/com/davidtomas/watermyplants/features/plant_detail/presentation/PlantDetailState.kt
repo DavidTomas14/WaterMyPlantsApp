@@ -1,39 +1,36 @@
 package com.davidtomas.watermyplants.features.plant_detail.presentation
 
-import com.davidtomas.watermyplants.features.home.domain.model.Plant
+import com.davidtomas.watermyplants.features.home.domain.model.PlantModel
 import com.davidtomas.watermyplants.features.home.domain.model.PlantStatus
 
 data class PlantDetailState(
-    val tabSelected: PlantStatus = PlantStatus.Upcoming,
+    val tabSelected: PlantStatus = PlantStatus.Today,
     val showDialog: Boolean = false,
-    val plantToDelete: Plant? = null,
-    val plants: List<Plant> = listOf(
-        Plant(
+    val plantModelToDelete: PlantModel? = null,
+    val plantModels: List<PlantModel> = listOf(
+        PlantModel(
             name = "David",
             description = "Gordo pero fuerte",
             imageUrl = "",
             water = "50ml",
             time = "Mañana",
-            plantStatus = PlantStatus.Upcoming,
-            needsWater = false,
+            wateringDates = listOf()
         ),
-        Plant(
+        PlantModel(
             name = "Fer",
             description = "Gordo pero fuerte",
             imageUrl = "",
             water = "50ml",
             time = "Mañana",
-            plantStatus = PlantStatus.ForgotToWater,
-            needsWater = true,
+            wateringDates = listOf()
         ),
-        Plant(
+        PlantModel(
             name = "Migue",
             description = "Gordo pero fuerte",
             imageUrl = "",
             water = "50ml",
             time = "Mañana",
-            plantStatus = PlantStatus.History,
-            needsWater = false,
+            wateringDates = listOf()
         )
     )
 )

@@ -1,6 +1,6 @@
 package com.davidtomas.watermyplants.features.home.presentation
 
-import com.davidtomas.watermyplants.features.home.domain.model.Plant
+import com.davidtomas.watermyplants.features.home.domain.model.PlantModel
 import com.davidtomas.watermyplants.features.home.domain.model.PlantStatus
 
 sealed class HomeEvent{
@@ -9,8 +9,8 @@ sealed class HomeEvent{
     object OnNotificationsClick: HomeEvent()
     object OnConfirmDeleteClick: HomeEvent()
 
-    data class OnDeletePlantLongPress(val plant: Plant): HomeEvent()
-    data class OnIconClick(val plant: Plant): HomeEvent()
+    data class OnDeletePlantLongPress(val plantModel: PlantModel): HomeEvent()
+    data class OnIconClick(val plantModel: PlantModel): HomeEvent()
 
-    data class OnPlantClick(val plant: Plant): HomeEvent()
+    data class OnPlantClick(val plantModel: PlantModel): HomeEvent()
 }

@@ -2,7 +2,9 @@ package com.davidtomas.watermyplants.core.data.di
 
 import android.app.Application
 import androidx.room.Room
-import com.davidtomas.watermyplants.core.data.local.PlantsDatabase
+import com.davidtomas.watermyplants.core.data.local.PlantDatabase
+import com.davidtomas.watermyplants.core.data.repository.PlantRepositoryImpl
+import com.davidtomas.watermyplants.core.domain.repository.PlantRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,11 +16,19 @@ import javax.inject.Singleton
 object PlantDataModule {
     @Provides
     @Singleton
-    fun providePlantsDatabase(app: Application): PlantsDatabase {
+    fun providePlantsDatabase(app: Application): PlantDatabase {
         return Room.databaseBuilder(
             app,
-            PlantsDatabase::class.java,
+            PlantDatabase::class.java,
             "plant_db"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun providePlantRepository(
+        db: PlantDatabase
+    ): PlantRepository {
+        return PlantRepositoryImpl(db.dao)
     }
 }

@@ -25,28 +25,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.davidtomas.watermyplants.R
+import com.davidtomas.watermyplants.core.util.formatToTwoLetterString
 import com.davidtomas.watermyplants.core_ui.LocalSpacing
-import com.davidtomas.watermyplants.features.home.domain.model.Plant
+import com.davidtomas.watermyplants.features.home.domain.model.PlantModel
+import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlantItem(
-    plant: Plant,
-    onCardClick: (Plant) -> Unit,
-    onCardLongClick: (Plant) -> Unit,
-    onIconClick: (Plant) -> Unit,
+    plantModel: PlantModel,
+    onCardClick: (PlantModel) -> Unit,
+    onCardLongClick: (PlantModel) -> Unit,
+    onIconClick: (PlantModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier
             .wrapContentSize()
             .combinedClickable(
-                onClick = { onCardClick(plant) },
-                onLongClick = { onCardLongClick(plant) }
+                onClick = { onCardClick(plantModel) },
+                onLongClick = { onCardLongClick(plantModel) }
             ),
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(
@@ -57,13 +60,20 @@ fun PlantItem(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            ImageSectionWithTags(water = plant.water, date = plant.time)
+            ImageSectionWithTags(
+                water = plantModel.water, date =
+                if (plantModel.wateringDates.first() == LocalDate.now().dayOfWeek) {
+                    stringResource(id = R.string.today)
+                } else {
+                    plantModel.wateringDates.formatToTwoLetterString()
+                }
+            )
             ItemFooter(
-                name = plant.name,
-                description = plant.description,
-                needsWater = plant.needsWater,
+                name = plantModel.name,
+                description = plantModel.description,
+                needsWater = true,
                 onIconClick = {
-                    onIconClick(plant)
+                    onIconClick(plantModel)
                 }
 
             )
@@ -92,7 +102,7 @@ fun ImageSectionWithTags(
                 .align(Alignment.TopStart)
                 .padding(spacing.spaceMedium)
         ) {
-            InfoTag(tagText = water)
+            InfoTag(tagText = water + stringResource(id = R.string.unit_ml))
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             InfoTag(tagText = date)
         }

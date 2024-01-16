@@ -9,7 +9,7 @@ import com.davidtomas.watermyplants.core.data.local.entity.PlantEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlantsDao {
+interface PlantDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlant(plantEntity: PlantEntity)
@@ -25,4 +25,12 @@ interface PlantsDao {
     )
     fun getPlants(): Flow<List<PlantEntity>>
 
+    @Query(
+        """
+            SELECT *
+            FROM plantentity
+            WHERE id = :idPlant
+        """
+    )
+    fun getPlantById(idPlant: Int): Flow<PlantEntity>
 }
